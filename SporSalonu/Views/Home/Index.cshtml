@@ -1,0 +1,496 @@
+﻿@*
+=====================================================
+ANA SAYFA VİEW'I (Index.cshtml)
+Spor salonunun ana sayfası - Hero bölümü, hizmetler,
+antrenörler ve istatistikler gösterilir
+=====================================================
+*@
+
+@model AnaSayfaViewModel
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<!-- =====================================================
+     HERO BÖLÜMÜ
+     Ana tanıtım alanı - Büyük başlık ve CTA butonları
+     ===================================================== -->
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4 animate-slide-up">
+                    Sağlıklı Yaşama<br>
+                    <span class="text-gradient">İlk Adımı</span> Atın
+                </h1>
+                <p class="lead mb-4 text-light animate-slide-up" style="animation-delay: 0.2s;">
+                    FitLife ile profesyonel antrenörler eşliğinde hedeflerinize ulaşın. 
+                    Kişiselleştirilmiş programlar, modern ekipmanlar ve yapay zeka destekli önerilerle 
+                    fitness yolculuğunuza bugün başlayın!
+                </p>
+                <div class="d-flex flex-wrap gap-3 animate-slide-up" style="animation-delay: 0.4s;">
+                    @if (!User.Identity?.IsAuthenticated ?? true)
+                    {
+                        <a asp-controller="Hesap" asp-action="KayitOl" class="btn btn-primary btn-lg">
+                            <i class="bi bi-person-plus me-2"></i>Ücretsiz Üye Ol
+                        </a>
+                    }
+                    <a asp-controller="Randevu" asp-action="Olustur" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-calendar-plus me-2"></i>Randevu Al
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="hero-image animate-float">
+                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600" 
+                         alt="Fitness" class="img-fluid rounded-4 shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =====================================================
+     İSTATİSTİKLER BÖLÜMÜ
+     ===================================================== -->
+<section class="stats-section py-5">
+    <div class="container">
+        <div class="row g-4 justify-content-center">
+            <div class="col-6 col-md-3">
+                <div class="stat-card text-center">
+                    <div class="stat-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <h3 class="stat-number">@Model.ToplamUye+</h3>
+                    <p class="stat-label">Mutlu Üye</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card text-center">
+                    <div class="stat-icon">
+                        <i class="bi bi-person-badge-fill"></i>
+                    </div>
+                    <h3 class="stat-number">@Model.ToplamAntrenor</h3>
+                    <p class="stat-label">Uzman Antrenör</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card text-center">
+                    <div class="stat-icon">
+                        <i class="bi bi-grid-fill"></i>
+                    </div>
+                    <h3 class="stat-number">@Model.ToplamHizmet</h3>
+                    <p class="stat-label">Farklı Hizmet</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card text-center">
+                    <div class="stat-icon">
+                        <i class="bi bi-clock-fill"></i>
+                    </div>
+                    <h3 class="stat-number">16</h3>
+                    <p class="stat-label">Saat Açık</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =====================================================
+     HİZMETLER BÖLÜMÜ
+     ===================================================== -->
+<section class="services-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h6 class="text-primary fw-bold text-uppercase">Hizmetlerimiz</h6>
+            <h2 class="display-6 fw-bold">Size Özel Programlar</h2>
+            <p class="text-muted">Hedeflerinize uygun profesyonel hizmetlerimizi keşfedin</p>
+        </div>
+        
+        <div class="row g-4">
+            @foreach (var hizmet in Model.Hizmetler.Take(4))
+            {
+                <div class="col-md-6 col-lg-3">
+                    <div class="service-card h-100">
+                        <div class="service-icon">
+                            @{
+                                // Kategoriye göre ikon seç
+                                var ikon = hizmet.Kategori switch
+                                {
+                                    HizmetKategorisi.Fitness => "bi-activity",
+                                    HizmetKategorisi.Yoga => "bi-flower1",
+                                    HizmetKategorisi.Pilates => "bi-heart-pulse",
+                                    HizmetKategorisi.Kardio => "bi-speedometer",
+                                    HizmetKategorisi.KasGelistirme => "bi-lightning",
+                                    HizmetKategorisi.Crossfit => "bi-fire",
+                                    HizmetKategorisi.Boks => "bi-hand-thumbs-up",
+                                    _ => "bi-star"
+                                };
+                            }
+                            <i class="bi @ikon"></i>
+                        </div>
+                        <h5 class="fw-bold mt-3">@hizmet.Ad</h5>
+                        <p class="text-muted small">@(hizmet.Aciklama?.Length > 80 ? hizmet.Aciklama.Substring(0, 80) + "..." : hizmet.Aciklama)</p>
+                        <div class="service-meta">
+                            <span><i class="bi bi-clock me-1"></i>@hizmet.SureDakika dk</span>
+                            <span class="fw-bold text-primary">@hizmet.Ucret.ToString("C0")</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <div class="text-center mt-5">
+            <a asp-controller="Home" asp-action="Hizmetlerimiz" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-grid me-2"></i>Tüm Hizmetleri Gör
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- =====================================================
+     ANTRENÖRLER BÖLÜMÜ
+     ===================================================== -->
+<section class="trainers-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h6 class="text-primary fw-bold text-uppercase">Ekibimiz</h6>
+            <h2 class="display-6 fw-bold">Uzman Antrenörlerimiz</h2>
+            <p class="text-muted">Deneyimli kadromuzla tanışın</p>
+        </div>
+        
+        <div class="row g-4">
+            @foreach (var antrenor in Model.Antrenorler)
+            {
+                <div class="col-md-6 col-lg-3">
+                    <div class="trainer-card h-100">
+                        <div class="trainer-image">
+                            @if (!string.IsNullOrEmpty(antrenor.FotografUrl))
+                            {
+                                <img src="@antrenor.FotografUrl" alt="@antrenor.TamIsim">
+                            }
+                            else
+                            {
+                                <div class="trainer-avatar">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+                            }
+                        </div>
+                        <div class="trainer-info">
+                            <h5 class="fw-bold mb-1">@antrenor.TamIsim</h5>
+                            <p class="text-primary small mb-2">@antrenor.UzmanlikAlanlari</p>
+                            <p class="text-muted small mb-3">
+                                <i class="bi bi-award me-1"></i>@antrenor.DeneyimYili yıl deneyim
+                            </p>
+                            <a asp-controller="Home" asp-action="AntrenorDetay" asp-route-id="@antrenor.Id" 
+                               class="btn btn-sm btn-outline-primary">
+                                Profili Gör
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <div class="text-center mt-5">
+            <a asp-controller="Home" asp-action="Antrenorler" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-people me-2"></i>Tüm Antrenörleri Gör
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- =====================================================
+     AI ÖNERİ BÖLÜMÜ
+     ===================================================== -->
+<section class="ai-section py-5 bg-dark text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h6 class="text-warning fw-bold text-uppercase">Yapay Zeka Destekli</h6>
+                <h2 class="display-6 fw-bold mb-4">Kişisel Antrenörünüz<br>Artık Cebinizde</h2>
+                <p class="text-light mb-4">
+                    Vücut tipinize, hedeflerinize ve yaşam tarzınıza uygun egzersiz ve beslenme programı 
+                    oluşturun. Yapay zeka teknolojimiz size özel öneriler sunar.
+                </p>
+                <ul class="list-unstyled mb-4">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> BMI analizi ve değerlendirme</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Kişiselleştirilmiş egzersiz programı</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Beslenme ve diyet önerileri</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Haftalık antrenman takvimi</li>
+                </ul>
+                <a asp-controller="AI" asp-action="Index" class="btn btn-warning btn-lg">
+                    <i class="bi bi-robot me-2"></i>AI Önerisi Al
+                </a>
+            </div>
+            <div class="col-lg-6">
+                <div class="ai-visual text-center">
+                    <div class="ai-circle">
+                        <i class="bi bi-cpu display-1"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =====================================================
+     CTA (Call to Action) BÖLÜMÜ
+     ===================================================== -->
+<section class="cta-section py-5">
+    <div class="container">
+        <div class="cta-card text-center">
+            <h2 class="display-6 fw-bold mb-3">Bugün Başlayın!</h2>
+            <p class="lead mb-4">İlk adımı atın ve sağlıklı yaşam yolculuğunuza başlayın.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a asp-controller="Randevu" asp-action="Olustur" class="btn btn-primary btn-lg">
+                    <i class="bi bi-calendar-plus me-2"></i>Hemen Randevu Al
+                </a>
+                <a asp-controller="Home" asp-action="Iletisim" class="btn btn-outline-dark btn-lg">
+                    <i class="bi bi-telephone me-2"></i>Bizi Arayın
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+<style>
+    /* =====================================================
+       HERO BÖLÜMÜ STİLLERİ
+       ===================================================== */
+    .hero-section {
+        background: linear-gradient(135deg, #1d3557 0%, #2a4a6d 50%, #457b9d 100%);
+        position: relative;
+        overflow: hidden;
+        margin-top: -2rem;
+        padding: 4rem 0;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1920') center/cover;
+        opacity: 0.1;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        color: white;
+    }
+
+    .min-vh-75 {
+        min-height: 75vh;
+    }
+
+    .text-gradient {
+        background: linear-gradient(135deg, #e63946, #f4a261);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-image img {
+        max-height: 500px;
+        object-fit: cover;
+    }
+
+    /* Animasyonlar */
+    @@keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @@keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+    }
+
+    .animate-slide-up {
+        animation: slideUp 0.8s ease-out forwards;
+    }
+
+    .animate-float {
+        animation: float 4s ease-in-out infinite;
+    }
+
+    /* =====================================================
+       İSTATİSTİKLER STİLLERİ
+       ===================================================== */
+    .stats-section {
+        background: white;
+        margin-top: -50px;
+        position: relative;
+        z-index: 10;
+        border-radius: 20px;
+        margin-left: 2rem;
+        margin-right: 2rem;
+        box-shadow: 0 10px 50px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card {
+        padding: 1.5rem;
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #e63946, #f4a261);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+    }
+
+    .stat-icon i {
+        font-size: 1.8rem;
+        color: white;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1d3557;
+    }
+
+    .stat-label {
+        color: #6c757d;
+        margin-bottom: 0;
+    }
+
+    /* =====================================================
+       HİZMETLER STİLLERİ
+       ===================================================== */
+    .service-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .service-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, rgba(230, 57, 70, 0.1), rgba(244, 162, 97, 0.1));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+
+    .service-icon i {
+        font-size: 2.5rem;
+        color: #e63946;
+    }
+
+    .service-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+        margin-top: 1rem;
+    }
+
+    /* =====================================================
+       ANTRENÖRLER STİLLERİ
+       ===================================================== */
+    .trainer-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .trainer-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .trainer-image {
+        height: 200px;
+        background: linear-gradient(135deg, #1d3557, #457b9d);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .trainer-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .trainer-avatar {
+        width: 100px;
+        height: 100px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .trainer-avatar i {
+        font-size: 3rem;
+        color: white;
+    }
+
+    .trainer-info {
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    /* =====================================================
+       AI BÖLÜMÜ STİLLERİ
+       ===================================================== */
+    .ai-section {
+        background: linear-gradient(135deg, #1d3557, #2a4a6d);
+    }
+
+    .ai-circle {
+        width: 250px;
+        height: 250px;
+        background: linear-gradient(135deg, rgba(230, 57, 70, 0.3), rgba(244, 162, 97, 0.3));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    .ai-circle i {
+        color: #f4a261;
+    }
+
+    @@keyframes pulse {
+        0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 162, 97, 0.4); }
+        50% { transform: scale(1.05); box-shadow: 0 0 30px 10px rgba(244, 162, 97, 0.2); }
+    }
+
+    /* =====================================================
+       CTA BÖLÜMÜ STİLLERİ
+       ===================================================== */
+    .cta-card {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 30px;
+        padding: 4rem 2rem;
+    }
+</style>
+}

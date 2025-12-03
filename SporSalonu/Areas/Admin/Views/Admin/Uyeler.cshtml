@@ -1,0 +1,176 @@
+@*
+=====================================================
+ADMIN - ÜYELER SAYFASI
+Tüm üyeleri listeler ve yönetir
+=====================================================
+*@
+
+@model List<Uye>
+@{
+    ViewData["Title"] = "Üye Yönetimi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid py-4">
+    <!-- Sayfa Başlığı -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-people-fill text-primary me-2"></i>Üye Yönetimi
+            </h2>
+            <p class="text-muted mb-0">Sistemdeki tüm üyeleri görüntüleyin ve yönetin</p>
+        </div>
+        <div>
+            <span class="badge bg-primary fs-6">Toplam: @Model.Count üye</span>
+        </div>
+    </div>
+
+    <!-- Üye Tablosu -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th>E-posta</th>
+                            <th>Telefon</th>
+                            <th>Kayıt Tarihi</th>
+                            <th>Boy/Kilo</th>
+                            <th>Hedef</th>
+                            <th>Durum</th>
+                            <th class="text-center">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            @foreach (var uye in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-circle me-2">
+                                                @(uye.Ad?.FirstOrDefault())@(uye.Soyad?.FirstOrDefault())
+                                            </div>
+                                            <div>
+                                                <strong>@uye.Ad @uye.Soyad</strong>
+                                                <br><small class="text-muted">@uye.Cinsiyet</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@uye.Email</td>
+                                    <td>@(uye.PhoneNumber ?? "-")</td>
+                                    <td>@uye.UyelikTarihi.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                                    <td>
+                                        @if (uye.Boy.HasValue && uye.Kilo.HasValue && uye.BMI.HasValue)
+                                        {
+                                            var kategori = uye.BMIKategorisi;
+                                            var badgeClass = kategori switch
+                                            {
+                                                "Zayıf" => "bg-info",
+                                                "Normal" => "bg-success",
+                                                "Fazla Kilolu" => "bg-warning text-dark",
+                                                "Obez" => "bg-danger",
+                                                _ => "bg-secondary"
+                                            };
+                                            
+                                            <span>@uye.Boy cm / @uye.Kilo kg</span>
+                                            <br />
+                                            <small class="text-muted">BMI: @uye.BMI.Value.ToString("F1")</small>
+                                            <br />
+                                            <span class="badge @badgeClass">@kategori</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (uye.FitnessHedefi.HasValue)
+                                        {
+                                            <span class="badge bg-info">@uye.FitnessHedefi</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (uye.AktifUyelik)
+                                        {
+                                            <span class="badge bg-success">Aktif</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">Pasif</span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-sm">
+                                            @if (uye.AktifUyelik)
+                                            {
+                                                <!-- Aktif üye: Pasif yapma butonu -->
+                                                <form asp-action="UyeSil" asp-route-id="@uye.Id" method="post" class="d-inline"
+                                                      onsubmit="return confirm('@uye.Ad @uye.Soyad pasif yapılacak. Emin misiniz?');">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-warning btn-sm" title="Pasif Yap">
+                                                        <i class="bi bi-pause-circle"></i>
+                                                    </button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <!-- Pasif üye: Aktifleştirme butonu -->
+                                                <form asp-action="UyeAktifle" asp-route-id="@uye.Id" method="post" class="d-inline"
+                                                      onsubmit="return confirm('@uye.Ad @uye.Soyad tekrar aktif yapılacak. Onaylıyor musunuz?');">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-success btn-sm" title="Aktifleştir">
+                                                        <i class="bi bi-play-circle"></i>
+                                                    </button>
+                                                </form>
+                                            }
+                                            <!-- Tamamen silme butonu (her zaman göster) -->
+                                            <form asp-action="UyeTamamenSil" asp-route-id="@uye.Id" method="post" class="d-inline"
+                                                  onsubmit="return confirm('⚠️ DİKKAT!\n\n@uye.Ad @uye.Soyad VERİTABANINDAN TAMAMEN SİLİNECEK!\n\nBu işlem GERİ ALINAMAZ!\n\nDevam etmek istediğinizden emin misiniz?');">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Tamamen Sil">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="text-center py-5">
+                                    <i class="bi bi-inbox display-4 text-muted"></i>
+                                    <p class="mt-2 text-muted">Henüz üye bulunmuyor</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .avatar-circle {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--primary-color), #f4a261);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 0.8rem;
+    }
+</style>
+

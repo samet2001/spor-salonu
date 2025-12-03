@@ -1,0 +1,148 @@
+@*
+=====================================================
+HİZMETLERİMİZ SAYFASI (Hizmetlerimiz.cshtml)
+Spor salonunun sunduğu tüm hizmetleri listeler
+=====================================================
+*@
+
+@model List<Hizmet>
+@{
+    ViewData["Title"] = "Hizmetlerimiz";
+}
+
+<!-- Sayfa Başlığı -->
+<div class="page-header-section text-center mb-5">
+    <h1 class="display-4 fw-bold">Hizmetlerimiz</h1>
+    <p class="lead text-muted">Profesyonel ekibimizle sunduğumuz tüm hizmetleri keşfedin</p>
+</div>
+
+<!-- Hizmet Listesi -->
+@if (Model != null && Model.Any())
+{
+    <div class="row g-4">
+        @foreach (var hizmet in Model)
+        {
+            var ikon = hizmet.Kategori switch
+            {
+                HizmetKategorisi.Fitness => "bi-activity",
+                HizmetKategorisi.Yoga => "bi-flower1",
+                HizmetKategorisi.Pilates => "bi-heart-pulse",
+                HizmetKategorisi.Kardio => "bi-speedometer",
+                HizmetKategorisi.KasGelistirme => "bi-lightning",
+                HizmetKategorisi.KiloVerme => "bi-graph-down-arrow",
+                HizmetKategorisi.Crossfit => "bi-fire",
+                HizmetKategorisi.Boks => "bi-hand-thumbs-up",
+                _ => "bi-star"
+            };
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card service-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="service-icon-wrapper mb-3">
+                            <i class="bi @ikon"></i>
+                        </div>
+                        <span class="badge bg-primary mb-2">@hizmet.Kategori</span>
+                        <h5 class="card-title fw-bold">@hizmet.Ad</h5>
+                        <p class="card-text text-muted">@hizmet.Aciklama</p>
+                        
+                        <div class="service-details mt-3">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <div class="detail-item">
+                                        <i class="bi bi-clock text-primary"></i>
+                                        <span>@hizmet.SureDakika dk</span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="detail-item">
+                                        <i class="bi bi-people text-info"></i>
+                                        <span>Maks @hizmet.MaksimumKatilimci</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="price-tag mt-3">
+                            <span class="h4 text-primary fw-bold">@hizmet.Ucret.ToString("C0")</span>
+                            <small class="text-muted">/ seans</small>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 p-3">
+                        <a asp-controller="Randevu" asp-action="Olustur" class="btn btn-primary w-100">
+                            <i class="bi bi-calendar-plus me-2"></i>Randevu Al
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="text-center py-5">
+        <div class="empty-icon mb-4">
+            <i class="bi bi-grid display-1 text-muted"></i>
+        </div>
+        <h4>Henüz hizmet tanımlanmamış</h4>
+        <p class="text-muted">Yakında hizmetlerimiz burada listelenecek.</p>
+    </div>
+}
+
+@section Styles {
+<style>
+    .page-header-section {
+        background: linear-gradient(135deg, var(--secondary-color), #2a4a6d);
+        color: white;
+        padding: 3rem 2rem;
+        border-radius: 20px;
+        margin-top: -1rem;
+    }
+    
+    .page-header-section p { color: rgba(255,255,255,0.8); }
+    
+    .service-card {
+        border-radius: 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    
+    .service-icon-wrapper {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, rgba(230,57,70,0.1), rgba(244,162,97,0.1));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+    
+    .service-icon-wrapper i {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+    }
+    
+    .detail-item {
+        padding: 0.5rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+    
+    .detail-item i {
+        display: block;
+        font-size: 1.2rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .price-tag {
+        padding: 1rem;
+        background: linear-gradient(135deg, rgba(230,57,70,0.1), rgba(244,162,97,0.1));
+        border-radius: 15px;
+    }
+</style>
+}
+

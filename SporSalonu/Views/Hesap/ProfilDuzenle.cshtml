@@ -1,0 +1,127 @@
+@*
+=====================================================
+PROFİL DÜZENLEME SAYFASI
+Kullanıcı bilgilerini günceller
+=====================================================
+*@
+
+@model ProfilDuzenleViewModel
+@{
+    ViewData["Title"] = "Profil Düzenle";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Sayfa Başlığı -->
+            <div class="d-flex align-items-center mb-4">
+                <a asp-action="Profil" class="btn btn-outline-secondary me-3">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <div>
+                    <h2 class="fw-bold mb-0">
+                        <i class="bi bi-pencil-square text-primary me-2"></i>Profil Düzenle
+                    </h2>
+                    <p class="text-muted mb-0">Bilgilerinizi güncelleyin</p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <form asp-action="ProfilDuzenle" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <!-- Kişisel Bilgiler -->
+                        <h5 class="fw-bold mb-3 text-primary">
+                            <i class="bi bi-person me-2"></i>Kişisel Bilgiler
+                        </h5>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="Ad" class="form-label">Ad *</label>
+                                <input asp-for="Ad" class="form-control" />
+                                <span asp-validation-for="Ad" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Soyad" class="form-label">Soyad *</label>
+                                <input asp-for="Soyad" class="form-control" />
+                                <span asp-validation-for="Soyad" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Telefon" class="form-label">Telefon</label>
+                                <input asp-for="Telefon" class="form-control" />
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Cinsiyet" class="form-label">Cinsiyet</label>
+                                <select asp-for="Cinsiyet" asp-items="Html.GetEnumSelectList<Cinsiyet>()" class="form-select"></select>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="DogumTarihi" class="form-label">Doğum Tarihi</label>
+                                <input asp-for="DogumTarihi" class="form-control" type="date" />
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <!-- Fiziksel Bilgiler -->
+                        <h5 class="fw-bold mb-3 text-primary">
+                            <i class="bi bi-heart-pulse me-2"></i>Fiziksel Bilgiler
+                        </h5>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="Boy" class="form-label">Boy (cm)</label>
+                                <input asp-for="Boy" class="form-control" type="number" min="100" max="250" />
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Kilo" class="form-label">Kilo (kg)</label>
+                                <input asp-for="Kilo" class="form-control" type="number" min="30" max="300" step="0.1" />
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <!-- Fitness Bilgileri -->
+                        <h5 class="fw-bold mb-3 text-primary">
+                            <i class="bi bi-trophy me-2"></i>Fitness Bilgileri
+                        </h5>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="FitnessHedefi" class="form-label">Fitness Hedefi</label>
+                                <select asp-for="FitnessHedefi" asp-items="Html.GetEnumSelectList<FitnessHedefi>()" class="form-select">
+                                    <option value="">Seçiniz...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="DeneyimSeviyesi" class="form-label">Deneyim Seviyesi</label>
+                                <select asp-for="DeneyimSeviyesi" asp-items="Html.GetEnumSelectList<DeneyimSeviyesi>()" class="form-select">
+                                    <option value="">Seçiniz...</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="SaglikNotu" class="form-label">Sağlık Notu</label>
+                                <textarea asp-for="SaglikNotu" class="form-control" rows="3" placeholder="Varsa sağlık sorunlarınızı belirtin..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Butonlar -->
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg me-2"></i>Kaydet
+                            </button>
+                            <a asp-action="Profil" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-lg me-2"></i>İptal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

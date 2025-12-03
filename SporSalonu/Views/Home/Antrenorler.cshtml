@@ -1,0 +1,162 @@
+@*
+=====================================================
+ANTRENÖRLER SAYFASI (Antrenorler.cshtml)
+Spor salonundaki tüm antrenörleri listeler
+=====================================================
+*@
+
+@model List<Antrenor>
+@{
+    ViewData["Title"] = "Antrenörlerimiz";
+}
+
+<!-- Sayfa Başlığı -->
+<div class="page-header-section text-center mb-5">
+    <h1 class="display-4 fw-bold">Uzman Antrenörlerimiz</h1>
+    <p class="lead text-muted">Deneyimli kadromuzla tanışın ve fitness hedeflerinize ulaşın</p>
+</div>
+
+<!-- Antrenör Listesi -->
+@if (Model != null && Model.Any())
+{
+    <div class="row g-4">
+        @foreach (var antrenor in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card trainer-card h-100">
+                    <div class="trainer-image-wrapper">
+                        @if (!string.IsNullOrEmpty(antrenor.FotografUrl))
+                        {
+                            <img src="@antrenor.FotografUrl" class="trainer-image" alt="@antrenor.TamIsim" />
+                        }
+                        else
+                        {
+                            <div class="trainer-placeholder">
+                                <i class="bi bi-person-circle"></i>
+                            </div>
+                        }
+                    </div>
+                    
+                    <div class="card-body text-center p-4">
+                        <h5 class="card-title fw-bold mb-1">@antrenor.TamIsim</h5>
+                        <p class="text-primary fw-semibold mb-2">@antrenor.UzmanlikAlanlari</p>
+                        
+                        @if (!string.IsNullOrEmpty(antrenor.Biyografi))
+                        {
+                            <p class="card-text text-muted small">
+                                @(antrenor.Biyografi.Length > 100 ? antrenor.Biyografi.Substring(0, 100) + "..." : antrenor.Biyografi)
+                            </p>
+                        }
+                        
+                        <!-- İstatistikler -->
+                        <div class="trainer-stats mt-3">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <div class="stat-item">
+                                        <span class="stat-value">@antrenor.DeneyimYili</span>
+                                        <span class="stat-label">Yıl Deneyim</span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="stat-item">
+                                        <span class="stat-value">5.0</span>
+                                        <span class="stat-label">Puan</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer bg-transparent border-0 p-3">
+                        <a asp-controller="Randevu" asp-action="Olustur" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-calendar-check me-2"></i>Randevu Al
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="text-center py-5">
+        <div class="empty-icon mb-4">
+            <i class="bi bi-people display-1 text-muted"></i>
+        </div>
+        <h4>Henüz antrenör tanımlanmamış</h4>
+        <p class="text-muted">Yakında uzman antrenörlerimiz burada listelenecek.</p>
+    </div>
+}
+
+@section Styles {
+<style>
+    .page-header-section {
+        background: linear-gradient(135deg, var(--secondary-color), #2a4a6d);
+        color: white;
+        padding: 3rem 2rem;
+        border-radius: 20px;
+        margin-top: -1rem;
+    }
+    
+    .page-header-section p { color: rgba(255,255,255,0.8); }
+    
+    .trainer-card {
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .trainer-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
+    .trainer-image-wrapper {
+        position: relative;
+        height: 280px;
+        overflow: hidden;
+    }
+    
+    .trainer-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .trainer-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .trainer-placeholder i {
+        font-size: 8rem;
+        color: #ccc;
+    }
+    
+    .trainer-stats {
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+    }
+    
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .stat-value {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
+        color: #888;
+    }
+</style>
+}
+

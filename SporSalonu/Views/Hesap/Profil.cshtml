@@ -1,0 +1,247 @@
+@*
+=====================================================
+KULLANICI PROFİL SAYFASI
+Kullanıcı bilgilerini görüntüler
+=====================================================
+*@
+
+@model Uye
+@{
+    ViewData["Title"] = "Profilim";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Profil Kartı -->
+            <div class="card profile-card shadow-lg border-0">
+                <div class="card-header profile-header text-center py-5">
+                    <div class="profile-avatar mx-auto mb-3">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <h2 class="text-white mb-1">@Model.Ad @Model.Soyad</h2>
+                    <p class="text-white-50 mb-0">@Model.Email</p>
+                    @if (Model.AktifUyelik)
+                    {
+                        <span class="badge bg-success mt-2">Aktif Üye</span>
+                    }
+                </div>
+                
+                <div class="card-body p-4">
+                    <!-- Kişisel Bilgiler -->
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-person-vcard text-primary me-2"></i>Kişisel Bilgiler
+                    </h5>
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <label class="text-muted small">Ad Soyad</label>
+                                <p class="mb-0 fw-semibold">@Model.Ad @Model.Soyad</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <label class="text-muted small">E-posta</label>
+                                <p class="mb-0 fw-semibold">@Model.Email</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <label class="text-muted small">Telefon</label>
+                                <p class="mb-0 fw-semibold">@(Model.PhoneNumber ?? "Belirtilmemiş")</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <label class="text-muted small">Cinsiyet</label>
+                                <p class="mb-0 fw-semibold">@Model.Cinsiyet</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <label class="text-muted small">Üyelik Tarihi</label>
+                                <p class="mb-0 fw-semibold">@Model.UyelikTarihi.ToLocalTime().ToString("dd MMMM yyyy")</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <!-- Fiziksel Bilgiler -->
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-heart-pulse text-danger me-2"></i>Fiziksel Bilgiler
+                    </h5>
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <div class="stat-card text-center p-3">
+                                <i class="bi bi-rulers display-6 text-primary"></i>
+                                <h4 class="mb-0 mt-2">@(Model.Boy?.ToString() ?? "-") cm</h4>
+                                <small class="text-muted">Boy</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-card text-center p-3">
+                                <i class="bi bi-speedometer2 display-6 text-success"></i>
+                                <h4 class="mb-0 mt-2">@(Model.Kilo?.ToString() ?? "-") kg</h4>
+                                <small class="text-muted">Kilo</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-card text-center p-3">
+                                @if (Model.BMI.HasValue)
+                                {
+                                    var kategori = Model.BMIKategorisi;
+                                    var bmiRenk = kategori switch
+                                    {
+                                        "Zayıf" => "text-info",
+                                        "Normal" => "text-success",
+                                        "Fazla Kilolu" => "text-warning",
+                                        "Obez" => "text-danger",
+                                        _ => "text-muted"
+                                    };
+                                    var bmiIkon = kategori switch
+                                    {
+                                        "Zayıf" => "bi-arrow-down-circle",
+                                        "Normal" => "bi-check-circle",
+                                        "Fazla Kilolu" => "bi-arrow-up-circle",
+                                        "Obez" => "bi-exclamation-triangle",
+                                        _ => "bi-graph-up"
+                                    };
+                                    var badgeClass = kategori switch
+                                    {
+                                        "Zayıf" => "bg-info",
+                                        "Normal" => "bg-success",
+                                        "Fazla Kilolu" => "bg-warning text-dark",
+                                        "Obez" => "bg-danger",
+                                        _ => "bg-secondary"
+                                    };
+                                    <i class="bi @bmiIkon display-6 @bmiRenk"></i>
+                                    <h4 class="mb-0 mt-2">@Model.BMI.Value.ToString("F1")</h4>
+                                    <small class="text-muted">BMI</small>
+                                    <div class="mt-2">
+                                        <span class="badge @badgeClass">
+                                            @kategori
+                                        </span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-graph-up display-6 text-muted"></i>
+                                    <h4 class="mb-0 mt-2">-</h4>
+                                    <small class="text-muted">BMI</small>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <!-- Fitness Bilgileri -->
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-trophy text-warning me-2"></i>Fitness Bilgileri
+                    </h5>
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <label class="text-muted small">Fitness Hedefi</label>
+                                <p class="mb-0">
+                                    @if (Model.FitnessHedefi.HasValue)
+                                    {
+                                        <span class="badge bg-primary">@Model.FitnessHedefi</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Belirtilmemiş</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <label class="text-muted small">Deneyim Seviyesi</label>
+                                <p class="mb-0">
+                                    @if (Model.DeneyimSeviyesi.HasValue)
+                                    {
+                                        <span class="badge bg-info">@Model.DeneyimSeviyesi</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Belirtilmemiş</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.SaglikNotu))
+                    {
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <strong>Sağlık Notu:</strong> @Model.SaglikNotu
+                        </div>
+                    }
+                </div>
+                
+                <div class="card-footer bg-transparent p-4">
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a asp-action="ProfilDuzenle" class="btn btn-primary">
+                            <i class="bi bi-pencil me-2"></i>Profili Düzenle
+                        </a>
+                        <a asp-action="SifreDegistir" class="btn btn-outline-secondary">
+                            <i class="bi bi-key me-2"></i>Şifre Değiştir
+                        </a>
+                        <a asp-controller="Randevu" asp-action="Index" class="btn btn-outline-info">
+                            <i class="bi bi-calendar-check me-2"></i>Randevularım
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-card {
+        border-radius: 20px;
+        overflow: hidden;
+    }
+    
+    .profile-header {
+        background: linear-gradient(135deg, var(--secondary-color), #2a4a6d);
+    }
+    
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .profile-avatar i {
+        font-size: 3rem;
+        color: var(--primary-color);
+    }
+    
+    .info-item {
+        padding: 0.75rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+    
+    .stat-card {
+        background: #f8f9fa;
+        border-radius: 15px;
+        transition: transform 0.3s ease;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+

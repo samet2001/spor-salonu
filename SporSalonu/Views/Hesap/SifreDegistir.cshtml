@@ -1,0 +1,88 @@
+@*
+=====================================================
+ŞİFRE DEĞİŞTİRME SAYFASI
+=====================================================
+*@
+
+@model SifreDegistirViewModel
+@{
+    ViewData["Title"] = "Şifre Değiştir";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <!-- Sayfa Başlığı -->
+            <div class="d-flex align-items-center mb-4">
+                <a asp-action="Profil" class="btn btn-outline-secondary me-3">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <div>
+                    <h2 class="fw-bold mb-0">
+                        <i class="bi bi-key text-warning me-2"></i>Şifre Değiştir
+                    </h2>
+                    <p class="text-muted mb-0">Güvenliğiniz için şifrenizi güncelleyin</p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <form asp-action="SifreDegistir" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="MevcutSifre" class="form-label">Mevcut Şifre *</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input asp-for="MevcutSifre" class="form-control" type="password" placeholder="Mevcut şifreniz" />
+                            </div>
+                            <span asp-validation-for="MevcutSifre" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="YeniSifre" class="form-label">Yeni Şifre *</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-key"></i></span>
+                                <input asp-for="YeniSifre" class="form-control" type="password" placeholder="Yeni şifreniz" />
+                            </div>
+                            <span asp-validation-for="YeniSifre" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="YeniSifreTekrar" class="form-label">Yeni Şifre (Tekrar) *</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+                                <input asp-for="YeniSifreTekrar" class="form-control" type="password" placeholder="Yeni şifrenizi tekrar girin" />
+                            </div>
+                            <span asp-validation-for="YeniSifreTekrar" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-check-lg me-2"></i>Şifreyi Değiştir
+                            </button>
+                            <a asp-action="Profil" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-lg me-2"></i>İptal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-4">
+                <i class="bi bi-info-circle me-2"></i>
+                <strong>Güvenli şifre için:</strong>
+                <ul class="mb-0 mt-2">
+                    <li>En az 6 karakter uzunluğunda olmalı</li>
+                    <li>Büyük ve küçük harf içermeli</li>
+                    <li>En az bir rakam içermeli</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

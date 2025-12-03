@@ -1,0 +1,293 @@
+@*
+=====================================================
+RANDEVULARIM SAYFASI (Index.cshtml)
+Kullanıcının randevularını listeler
+=====================================================
+*@
+
+@model List<Randevu>
+@{
+    ViewData["Title"] = "Randevularım";
+}
+
+<!-- Sayfa Başlığı -->
+<div class="page-header mb-4">
+    <div class="row align-items-center">
+        <div class="col">
+            <h1 class="fw-bold mb-1">
+                <i class="bi bi-calendar-check me-2"></i>Randevularım
+            </h1>
+            <p class="text-muted mb-0">Tüm randevularınızı görüntüleyin ve yönetin</p>
+        </div>
+        <div class="col-auto">
+            <a asp-action="Olustur" class="btn btn-primary btn-lg">
+                <i class="bi bi-plus-circle me-2"></i>Yeni Randevu
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Randevu Listesi -->
+@if (Model.Any())
+{
+    <!-- Özet Kartları -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="summary-card beklemede">
+                <i class="bi bi-hourglass-split"></i>
+                <div>
+                    <h4>@Model.Count(r => r.Durum == RandevuDurumu.Beklemede)</h4>
+                    <span>Beklemede</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="summary-card onaylandi">
+                <i class="bi bi-check-circle"></i>
+                <div>
+                    <h4>@Model.Count(r => r.Durum == RandevuDurumu.Onaylandi)</h4>
+                    <span>Onaylandı</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="summary-card tamamlandi">
+                <i class="bi bi-trophy"></i>
+                <div>
+                    <h4>@Model.Count(r => r.Durum == RandevuDurumu.Tamamlandi)</h4>
+                    <span>Tamamlandı</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="summary-card iptal">
+                <i class="bi bi-x-circle"></i>
+                <div>
+                    <h4>@Model.Count(r => r.Durum == RandevuDurumu.IptalEdildi)</h4>
+                    <span>İptal</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Randevu Kartları -->
+    <div class="row g-4">
+        @foreach (var randevu in Model)
+        {
+            var durumClass = randevu.Durum switch
+            {
+                RandevuDurumu.Beklemede => "warning",
+                RandevuDurumu.Onaylandi => "info",
+                RandevuDurumu.Tamamlandi => "success",
+                RandevuDurumu.IptalEdildi => "danger",
+                RandevuDurumu.Gelmedi => "dark",
+                _ => "secondary"
+            };
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card randevu-card h-100 @(randevu.GecmisMi ? "gecmis" : "")">
+                    <!-- Durum Badge -->
+                    <div class="card-header bg-transparent border-0 pt-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-@durumClass px-3 py-2">
+                                @randevu.Durum
+                            </span>
+                            @if (randevu.BugunMu)
+                            {
+                                <span class="badge bg-primary">BUGÜN</span>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <!-- Tarih ve Saat -->
+                        <div class="randevu-datetime mb-3">
+                            <div class="tarih">
+                                <i class="bi bi-calendar3"></i>
+                                <span>@randevu.RandevuTarihi.ToString("dd MMMM yyyy, dddd")</span>
+                            </div>
+                            <div class="saat">
+                                <i class="bi bi-clock"></i>
+                                <span>@randevu.BaslangicSaati.ToString(@"hh\:mm") - @randevu.BitisSaati.ToString(@"hh\:mm")</span>
+                            </div>
+                        </div>
+
+                        <!-- Hizmet -->
+                        <h5 class="fw-bold mb-2">
+                            <i class="bi bi-activity text-primary me-2"></i>
+                            @randevu.Hizmet?.Ad
+                        </h5>
+
+                        <!-- Antrenör -->
+                        <p class="text-muted mb-3">
+                            <i class="bi bi-person-badge me-2"></i>
+                            @randevu.Antrenor?.TamIsim
+                        </p>
+
+                        <!-- Ücret -->
+                        <div class="randevu-ucret">
+                            <span class="label">Ücret:</span>
+                            <span class="amount">@randevu.Ucret.ToString("C0")</span>
+                        </div>
+                    </div>
+
+                    <!-- Eylemler -->
+                    <div class="card-footer bg-transparent border-0 pb-3">
+                        <div class="d-flex gap-2">
+                            <a asp-action="Detay" asp-route-id="@randevu.Id" class="btn btn-outline-primary btn-sm flex-grow-1">
+                                <i class="bi bi-eye me-1"></i>Detay
+                            </a>
+                            @if (!randevu.GecmisMi && randevu.Durum != RandevuDurumu.IptalEdildi && 
+                                 randevu.Durum != RandevuDurumu.Tamamlandi)
+                            {
+                                <form asp-action="IptalEt" method="post" class="flex-grow-1" 
+                                      onsubmit="return confirm('Bu randevuyu iptal etmek istediğinizden emin misiniz?');">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@randevu.Id" />
+                                    <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                                        <i class="bi bi-x-circle me-1"></i>İptal
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <!-- Boş Durum -->
+    <div class="empty-state text-center py-5">
+        <div class="empty-icon mb-4">
+            <i class="bi bi-calendar-x"></i>
+        </div>
+        <h3 class="fw-bold mb-3">Henüz randevunuz yok</h3>
+        <p class="text-muted mb-4">İlk randevunuzu oluşturarak başlayın!</p>
+        <a asp-action="Olustur" class="btn btn-primary btn-lg">
+            <i class="bi bi-plus-circle me-2"></i>Randevu Oluştur
+        </a>
+    </div>
+}
+
+@section Styles {
+<style>
+    .page-header {
+        background: linear-gradient(135deg, var(--secondary-color), #2a4a6d);
+        color: white;
+        padding: 2rem;
+        border-radius: 20px;
+        margin-top: -1rem;
+    }
+    
+    .page-header p {
+        color: rgba(255,255,255,0.8);
+    }
+    
+    .summary-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .summary-card i {
+        font-size: 2rem;
+        padding: 1rem;
+        border-radius: 12px;
+    }
+    
+    .summary-card.beklemede i { background: rgba(255,193,7,0.1); color: #ffc107; }
+    .summary-card.onaylandi i { background: rgba(13,202,240,0.1); color: #0dcaf0; }
+    .summary-card.tamamlandi i { background: rgba(25,135,84,0.1); color: #198754; }
+    .summary-card.iptal i { background: rgba(220,53,69,0.1); color: #dc3545; }
+    
+    .summary-card h4 {
+        font-weight: 700;
+        margin-bottom: 0;
+    }
+    
+    .summary-card span {
+        color: #6c757d;
+        font-size: 0.85rem;
+    }
+    
+    .randevu-card {
+        border-radius: 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .randevu-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+    
+    .randevu-card.gecmis {
+        opacity: 0.7;
+    }
+    
+    .randevu-datetime {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1rem;
+    }
+    
+    .randevu-datetime .tarih,
+    .randevu-datetime .saat {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .randevu-datetime .tarih {
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+    
+    .randevu-datetime i {
+        color: var(--primary-color);
+    }
+    
+    .randevu-ucret {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem;
+        background: linear-gradient(135deg, rgba(230,57,70,0.1), rgba(244,162,97,0.1));
+        border-radius: 10px;
+    }
+    
+    .randevu-ucret .amount {
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: var(--primary-color);
+    }
+    
+    .empty-state {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+    }
+    
+    .empty-icon {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, rgba(230,57,70,0.1), rgba(244,162,97,0.1));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+    
+    .empty-icon i {
+        font-size: 3rem;
+        color: var(--primary-color);
+    }
+</style>
+}
+

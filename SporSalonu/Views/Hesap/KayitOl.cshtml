@@ -1,0 +1,199 @@
+@*
+=====================================================
+KAYIT OL SAYFASI VİEW'I (KayitOl.cshtml)
+Yeni üye kayıt formu
+=====================================================
+*@
+
+@model KayitViewModel
+@{
+    ViewData["Title"] = "Üye Ol";
+}
+
+<div class="row justify-content-center py-5">
+    <div class="col-lg-8">
+        <!-- Kayıt Kartı -->
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-5">
+                <!-- Başlık -->
+                <div class="text-center mb-4">
+                    <div class="auth-icon mb-3">
+                        <i class="bi bi-person-plus"></i>
+                    </div>
+                    <h2 class="fw-bold">Üye Ol</h2>
+                    <p class="text-muted">FitLife ailesine katılın</p>
+                </div>
+
+                <!-- Kayıt Formu -->
+                <form asp-action="KayitOl" method="post">
+                    @Html.AntiForgeryToken()
+                    
+                    <!-- Genel hata mesajları -->
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <!-- Temel Bilgiler -->
+                    <h5 class="mb-3 text-primary"><i class="bi bi-person me-2"></i>Kişisel Bilgiler</h5>
+                    
+                    <div class="row">
+                        <!-- Ad -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Ad" class="form-label">Ad *</label>
+                            <input asp-for="Ad" class="form-control" placeholder="Adınız" />
+                            <span asp-validation-for="Ad" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Soyad -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Soyad" class="form-label">Soyad *</label>
+                            <input asp-for="Soyad" class="form-control" placeholder="Soyadınız" />
+                            <span asp-validation-for="Soyad" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- E-posta -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Email" class="form-label">E-posta *</label>
+                            <input asp-for="Email" class="form-control" placeholder="ornek@email.com" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Telefon -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Telefon" class="form-label">Telefon *</label>
+                            <input asp-for="Telefon" class="form-control" placeholder="05XX XXX XX XX" />
+                            <span asp-validation-for="Telefon" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Şifre Bilgileri -->
+                    <h5 class="mb-3 mt-4 text-primary"><i class="bi bi-shield-lock me-2"></i>Şifre</h5>
+                    
+                    <div class="row">
+                        <!-- Şifre -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Sifre" class="form-label">Şifre *</label>
+                            <input asp-for="Sifre" class="form-control" placeholder="Şifreniz" />
+                            <span asp-validation-for="Sifre" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Şifre Tekrar -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="SifreTekrar" class="form-label">Şifre Tekrar *</label>
+                            <input asp-for="SifreTekrar" class="form-control" placeholder="Şifrenizi tekrar girin" />
+                            <span asp-validation-for="SifreTekrar" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Opsiyonel Bilgiler (Accordion) -->
+                    <div class="accordion mt-4" id="ekBilgilerAccordion">
+                        <div class="accordion-item border-0">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-light" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#ekBilgiler">
+                                    <i class="bi bi-plus-circle me-2"></i>Ek Bilgiler (İsteğe Bağlı)
+                                </button>
+                            </h2>
+                            <div id="ekBilgiler" class="accordion-collapse collapse" data-bs-parent="#ekBilgilerAccordion">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <!-- Doğum Tarihi -->
+                                        <div class="col-md-4 mb-3">
+                                            <label asp-for="DogumTarihi" class="form-label">Doğum Tarihi</label>
+                                            <input asp-for="DogumTarihi" type="date" class="form-control" />
+                                        </div>
+
+                                        <!-- Cinsiyet -->
+                                        <div class="col-md-4 mb-3">
+                                            <label asp-for="Cinsiyet" class="form-label">Cinsiyet</label>
+                                            <select asp-for="Cinsiyet" class="form-select"
+                                                    asp-items="Html.GetEnumSelectList<Cinsiyet>()">
+                                                <option value="">Seçiniz</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Deneyim Seviyesi -->
+                                        <div class="col-md-4 mb-3">
+                                            <label asp-for="DeneyimSeviyesi" class="form-label">Deneyim</label>
+                                            <select asp-for="DeneyimSeviyesi" class="form-select"
+                                                    asp-items="Html.GetEnumSelectList<DeneyimSeviyesi>()">
+                                                <option value="">Seçiniz</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <!-- Boy -->
+                                        <div class="col-md-4 mb-3">
+                                            <label asp-for="Boy" class="form-label">Boy (cm)</label>
+                                            <input asp-for="Boy" type="number" class="form-control" placeholder="175" />
+                                        </div>
+
+                                        <!-- Kilo -->
+                                        <div class="col-md-4 mb-3">
+                                            <label asp-for="Kilo" class="form-label">Kilo (kg)</label>
+                                            <input asp-for="Kilo" type="number" step="0.1" class="form-control" placeholder="70" />
+                                        </div>
+
+                                        <!-- Fitness Hedefi -->
+                                        <div class="col-md-4 mb-3">
+                                            <label asp-for="FitnessHedefi" class="form-label">Hedefiniz</label>
+                                            <select asp-for="FitnessHedefi" class="form-select"
+                                                    asp-items="Html.GetEnumSelectList<FitnessHedefi>()">
+                                                <option value="">Seçiniz</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kayıt Butonu -->
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-person-plus me-2"></i>Üye Ol
+                        </button>
+                    </div>
+
+                    <!-- Giriş Linki -->
+                    <div class="text-center mt-4">
+                        <p class="mb-0">Zaten üye misiniz? 
+                            <a asp-action="Giris" class="text-primary fw-bold">Giriş Yapın</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+<style>
+    .auth-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #e63946, #f4a261);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+    
+    .auth-icon i {
+        font-size: 2.5rem;
+        color: white;
+    }
+    
+    .accordion-button:not(.collapsed) {
+        background: linear-gradient(135deg, rgba(230, 57, 70, 0.1), rgba(244, 162, 97, 0.1));
+        color: #e63946;
+    }
+</style>
+}
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}
+

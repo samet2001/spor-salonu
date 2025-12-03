@@ -1,0 +1,185 @@
+@*
+=====================================================
+GİRİŞ SAYFASI VİEW'I (Giris.cshtml)
+Kullanıcı giriş formu
+=====================================================
+*@
+
+@model GirisViewModel
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<div class="row justify-content-center py-5">
+    <div class="col-md-6 col-lg-5">
+        <!-- Giriş Kartı -->
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-5">
+                <!-- Başlık -->
+                <div class="text-center mb-4">
+                    <div class="auth-icon mb-3">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
+                    <h2 class="fw-bold">Hoş Geldiniz</h2>
+                    <p class="text-muted">Hesabınıza giriş yapın</p>
+                </div>
+
+                <!-- Giriş Formu -->
+                <form asp-action="Giris" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="ReturnUrl" />
+                    
+                    <!-- Genel hata mesajları -->
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <!-- E-posta -->
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">
+                            <i class="bi bi-envelope me-1"></i> E-posta
+                        </label>
+                        <input asp-for="Email" class="form-control form-control-lg" 
+                               placeholder="ornek@email.com" autocomplete="email" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Şifre -->
+                    <div class="mb-3">
+                        <label asp-for="Sifre" class="form-label">
+                            <i class="bi bi-lock me-1"></i> Şifre
+                        </label>
+                        <div class="input-group">
+                            <input asp-for="Sifre" class="form-control form-control-lg" 
+                                   placeholder="••••••" autocomplete="current-password" id="sifreInput" />
+                            <button type="button" class="btn btn-outline-secondary" onclick="toggleSifre()">
+                                <i class="bi bi-eye" id="sifreIcon"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Sifre" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Beni Hatırla -->
+                    <div class="mb-4">
+                        <div class="form-check">
+                            <input asp-for="BeniHatirla" class="form-check-input" />
+                            <label asp-for="BeniHatirla" class="form-check-label">Beni hatırla</label>
+                        </div>
+                    </div>
+
+                    <!-- Giriş Butonu -->
+                    <div class="d-grid mb-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Giriş Yap
+                        </button>
+                    </div>
+
+                    <!-- Kayıt Linki -->
+                    <div class="text-center">
+                        <p class="mb-0">Hesabınız yok mu? 
+                            <a asp-action="KayitOl" class="text-primary fw-bold">Üye Olun</a>
+                        </p>
+                    </div>
+                </form>
+
+                <!-- Demo Hesap Bilgileri -->
+                <hr class="my-4">
+                <div class="demo-info">
+                    <h6 class="text-muted mb-3"><i class="bi bi-info-circle me-1"></i> Demo Hesapları</h6>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="demo-account" onclick="doldurAdmin()">
+                                <i class="bi bi-shield-check text-danger"></i>
+                                <span class="small">Admin</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="demo-account" onclick="doldurUye()">
+                                <i class="bi bi-person text-primary"></i>
+                                <span class="small">Üye</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+<style>
+    .auth-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #e63946, #f4a261);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+    
+    .auth-icon i {
+        font-size: 2.5rem;
+        color: white;
+    }
+    
+    .demo-info {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1rem;
+    }
+    
+    .demo-account {
+        background: white;
+        border-radius: 8px;
+        padding: 0.8rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .demo-account:hover {
+        border-color: #e63946;
+        transform: translateY(-2px);
+    }
+    
+    .demo-account i {
+        display: block;
+        font-size: 1.5rem;
+        margin-bottom: 0.3rem;
+    }
+</style>
+}
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<script>
+    // Şifre göster/gizle
+    function toggleSifre() {
+        var input = document.getElementById('sifreInput');
+        var icon = document.getElementById('sifreIcon');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
+    }
+    
+    // Demo admin hesabını doldur
+    function doldurAdmin() {
+        document.getElementById('Email').value = 'b211210036@sakarya.edu.tr';
+        document.getElementById('sifreInput').value = 'sau';
+    }
+    
+    // Demo üye hesabını doldur
+    function doldurUye() {
+        document.getElementById('Email').value = 'uye@test.com';
+        document.getElementById('sifreInput').value = '123';
+    }
+</script>
+}
+

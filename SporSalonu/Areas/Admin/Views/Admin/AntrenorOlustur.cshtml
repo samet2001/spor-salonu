@@ -1,0 +1,140 @@
+@*
+=====================================================
+ADMIN - YENİ ANTRENÖR OLUŞTUR SAYFASI
+=====================================================
+*@
+
+@model Antrenor
+@{
+    ViewData["Title"] = "Yeni Antrenör Ekle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Sayfa Başlığı -->
+            <div class="d-flex align-items-center mb-4">
+                <a asp-action="Antrenorler" class="btn btn-outline-secondary me-3">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <div>
+                    <h2 class="fw-bold mb-0">
+                        <i class="bi bi-person-plus-fill text-success me-2"></i>Yeni Antrenör Ekle
+                    </h2>
+                    <p class="text-muted mb-0">Sisteme yeni antrenör kaydedin</p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form asp-action="AntrenorOlustur" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <!-- Kişisel Bilgiler -->
+                        <h5 class="fw-bold mb-3 text-primary">
+                            <i class="bi bi-person me-2"></i>Kişisel Bilgiler
+                        </h5>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="Ad" class="form-label">Ad *</label>
+                                <input asp-for="Ad" class="form-control" placeholder="Antrenör adı" />
+                                <span asp-validation-for="Ad" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Soyad" class="form-label">Soyad *</label>
+                                <input asp-for="Soyad" class="form-control" placeholder="Antrenör soyadı" />
+                                <span asp-validation-for="Soyad" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Eposta" class="form-label">E-posta *</label>
+                                <input asp-for="Eposta" class="form-control" type="email" placeholder="ornek@email.com" />
+                                <span asp-validation-for="Eposta" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Telefon" class="form-label">Telefon *</label>
+                                <input asp-for="Telefon" class="form-control" placeholder="05xx xxx xx xx" />
+                                <span asp-validation-for="Telefon" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Uzmanlık Bilgileri -->
+                        <h5 class="fw-bold mb-3 text-primary">
+                            <i class="bi bi-star me-2"></i>Uzmanlık Bilgileri
+                        </h5>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-12">
+                                <label asp-for="UzmanlikAlanlari" class="form-label">Uzmanlık Alanları *</label>
+                                <input asp-for="UzmanlikAlanlari" class="form-control" placeholder="Fitness, Yoga, Pilates..." />
+                                <small class="text-muted">Virgülle ayırarak birden fazla alan girebilirsiniz</small>
+                                <span asp-validation-for="UzmanlikAlanlari" class="text-danger small"></span>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="Biyografi" class="form-label">Biyografi</label>
+                                <textarea asp-for="Biyografi" class="form-control" rows="3" placeholder="Antrenör hakkında kısa bilgi..."></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="DeneyimYili" class="form-label">Deneyim (Yıl)</label>
+                                <input asp-for="DeneyimYili" class="form-control" type="number" min="0" />
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="SeansUcreti" class="form-label">Seans Ücreti (₺) *</label>
+                                <input asp-for="SeansUcreti" class="form-control" type="number" min="0" />
+                                <span asp-validation-for="SeansUcreti" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Çalışma Saatleri -->
+                        <h5 class="fw-bold mb-3 text-primary">
+                            <i class="bi bi-clock me-2"></i>Çalışma Saatleri
+                        </h5>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="MesaiBaslangic" class="form-label">Mesai Başlangıç *</label>
+                                <input asp-for="MesaiBaslangic" class="form-control" type="time" />
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="MesaiBitis" class="form-label">Mesai Bitiş *</label>
+                                <input asp-for="MesaiBitis" class="form-control" type="time" />
+                            </div>
+                        </div>
+
+                        <!-- Spor Salonu -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-12">
+                                <label asp-for="SporSalonuId" class="form-label">Spor Salonu *</label>
+                                <select asp-for="SporSalonuId" asp-items="ViewBag.SporSalonlari" class="form-select">
+                                    <option value="">Seçiniz...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Durum -->
+                        <div class="form-check form-switch mb-4">
+                            <input asp-for="Aktif" class="form-check-input" type="checkbox" checked />
+                            <label asp-for="Aktif" class="form-check-label">Aktif</label>
+                        </div>
+
+                        <!-- Butonlar -->
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-lg me-2"></i>Kaydet
+                            </button>
+                            <a asp-action="Antrenorler" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-lg me-2"></i>İptal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

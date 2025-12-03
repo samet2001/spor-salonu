@@ -1,0 +1,586 @@
+﻿@*
+=====================================================
+ANA LAYOUT DOSYASI (_Layout.cshtml)
+Bu dosya, tüm sayfaların ortak tasarım şablonudur
+Bootstrap 5 ve modern tasarım kullanılır
+=====================================================
+*@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <!-- Meta etiketleri -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="FitLife Spor Salonu - Profesyonel antrenörler ve modern ekipmanlarla sağlıklı yaşam" />
+    
+    <!-- Sayfa başlığı -->
+    <title>@ViewData["Title"] - FitLife Spor Salonu</title>
+    
+    <!-- Bootstrap 5 CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Google Fonts - Poppins (modern font) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Özel CSS stilleri -->
+    <style>
+        /* =====================================================
+           GENEL STİLLER
+           ===================================================== */
+        :root {
+            --primary-color: #e63946;      /* Ana renk - Kırmızı */
+            --secondary-color: #1d3557;    /* İkincil renk - Koyu mavi */
+            --accent-color: #f4a261;       /* Vurgu rengi - Turuncu */
+            --light-bg: #f8f9fa;           /* Açık arka plan */
+            --dark-bg: #1d3557;            /* Koyu arka plan */
+            --text-color: #2b2d42;         /* Metin rengi */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            background-color: #f5f6fa;
+        }
+
+        /* =====================================================
+           NAVİGASYON ÇUBUĞU
+           ===================================================== */
+        .navbar {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #2a4a6d 100%);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            padding: 0.8rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+
+        .navbar-brand i {
+            color: var(--primary-color);
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            margin: 0 0.2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: white !important;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link i {
+            margin-right: 0.4rem;
+        }
+
+        /* Kullanıcı dropdown menüsü */
+        .user-dropdown .dropdown-toggle {
+            background: var(--primary-color);
+            border: none;
+            border-radius: 25px;
+            padding: 0.5rem 1.2rem;
+            color: white;
+            font-weight: 500;
+        }
+
+        .user-dropdown .dropdown-menu {
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            padding: 0.5rem;
+        }
+
+        .user-dropdown .dropdown-item {
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+        }
+
+        .user-dropdown .dropdown-item:hover {
+            background-color: var(--light-bg);
+        }
+
+        /* =====================================================
+           ANA İÇERİK ALANI
+           ===================================================== */
+        .main-content {
+            min-height: calc(100vh - 200px);
+            padding: 2rem 0;
+        }
+
+        /* =====================================================
+           FOOTER (ALT BİLGİ)
+           ===================================================== */
+        footer {
+            background: var(--dark-bg);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+
+        footer h5 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        footer a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-social a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* =====================================================
+           KARTLAR
+           ===================================================== */
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        /* =====================================================
+           BUTONLAR
+           ===================================================== */
+        .btn-primary {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #d62839;
+            border-color: #d62839;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(230, 57, 70, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            border-color: var(--secondary-color);
+            border-radius: 8px;
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 8px;
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* =====================================================
+           BİLDİRİM KUTULARI
+           ===================================================== */
+        .alert {
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+        }
+
+        /* =====================================================
+           FORM ELEMANLARI
+           ===================================================== */
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 0.7rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.15);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* =====================================================
+           TABLO STİLLERİ
+           ===================================================== */
+        .table {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table thead {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .table thead th {
+            border: none;
+            padding: 1rem;
+            font-weight: 600;
+        }
+
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+
+        /* =====================================================
+           BADGE (ETİKET) STİLLERİ
+           ===================================================== */
+        .badge {
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        /* =====================================================
+           SAYFA BAŞLIKLARI
+           ===================================================== */
+        .page-header {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #2a4a6d 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 30px 30px;
+        }
+
+        .page-header h1 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header .breadcrumb {
+            background: transparent;
+            margin-bottom: 0;
+        }
+
+        .page-header .breadcrumb-item a {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .page-header .breadcrumb-item.active {
+            color: white;
+        }
+
+        /* =====================================================
+           ANİMASYONLAR
+           ===================================================== */
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+    
+    @* Head bölümüne ek içerik eklemek için *@
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <!-- =====================================================
+         NAVİGASYON ÇUBUĞU
+         ===================================================== -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <!-- Logo ve Site Adı -->
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <i class="bi bi-lightning-charge-fill"></i> FitLife
+            </a>
+            
+            <!-- Mobil menü butonu -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Menüyü aç/kapat">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Menü içeriği -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Sol menü -->
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-house-door"></i> Ana Sayfa
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Hizmetlerimiz">
+                            <i class="bi bi-grid"></i> Hizmetler
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Antrenorler">
+                            <i class="bi bi-people"></i> Antrenörler
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="AI" asp-action="Index">
+                            <i class="bi bi-robot"></i> AI Öneri
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Iletisim">
+                            <i class="bi bi-telephone"></i> İletişim
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Sağ menü (kullanıcı işlemleri) -->
+                <ul class="navbar-nav">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <!-- Giriş yapmış kullanıcı -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Randevu" asp-action="Index">
+                                <i class="bi bi-calendar-check"></i> Randevularım
+                            </a>
+                        </li>
+                        
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Admin" asp-action="Index">
+                                    <i class="bi bi-gear"></i> Admin Panel
+                                </a>
+                            </li>
+                        }
+                        
+                        <!-- Kullanıcı dropdown -->
+                        <li class="nav-item dropdown user-dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle"></i> @User.Identity?.Name?.Split('@')[0]
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Hesap" asp-action="Profil">
+                                        <i class="bi bi-person me-2"></i> Profilim
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Randevu" asp-action="Olustur">
+                                        <i class="bi bi-plus-circle me-2"></i> Yeni Randevu
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form asp-area="" asp-controller="Hesap" asp-action="Cikis" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="bi bi-box-arrow-right me-2"></i> Çıkış Yap
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <!-- Giriş yapmamış ziyaretçi -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Hesap" asp-action="Giris">
+                                <i class="bi bi-box-arrow-in-right"></i> Giriş Yap
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-primary text-white ms-2" asp-area="" asp-controller="Hesap" asp-action="KayitOl">
+                                <i class="bi bi-person-plus"></i> Üye Ol
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- =====================================================
+         ANA İÇERİK ALANI
+         ===================================================== -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Başarı mesajı -->
+            @if (TempData["Basari"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show fade-in" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    @TempData["Basari"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+                </div>
+            }
+            
+            <!-- Hata mesajı -->
+            @if (TempData["Hata"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show fade-in" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    @TempData["Hata"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+                </div>
+            }
+            
+            <!-- Sayfa içeriği buraya render edilir -->
+            @RenderBody()
+        </div>
+    </main>
+
+    <!-- =====================================================
+         FOOTER (ALT BİLGİ)
+         ===================================================== -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <!-- Hakkımızda -->
+                <div class="col-lg-4 mb-4">
+                    <h5><i class="bi bi-lightning-charge-fill text-danger"></i> FitLife</h5>
+                    <p>Modern ekipmanları ve uzman kadrosuyla sağlıklı yaşam yolculuğunuzda yanınızda. 
+                       Fitness, yoga, pilates ve daha fazlası için bizi ziyaret edin!</p>
+                    <div class="footer-social mt-3">
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Hızlı Linkler -->
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5>Hızlı Linkler</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a asp-controller="Home" asp-action="Index">Ana Sayfa</a></li>
+                        <li class="mb-2"><a asp-controller="Home" asp-action="Hizmetlerimiz">Hizmetler</a></li>
+                        <li class="mb-2"><a asp-controller="Home" asp-action="Antrenorler">Antrenörler</a></li>
+                        <li class="mb-2"><a asp-controller="AI" asp-action="Index">AI Öneri</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Hizmetler -->
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5>Hizmetler</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Fitness</a></li>
+                        <li class="mb-2"><a href="#">Yoga</a></li>
+                        <li class="mb-2"><a href="#">Pilates</a></li>
+                        <li class="mb-2"><a href="#">Crossfit</a></li>
+                    </ul>
+                </div>
+                
+                <!-- İletişim -->
+                <div class="col-lg-4 col-md-4 mb-4">
+                    <h5>İletişim</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-geo-alt me-2"></i> Sakarya Üniversitesi Kütüphanesi, Serdivan/Sakarya</li>
+                        <li class="mb-2"><i class="bi bi-telephone me-2"></i> 0264 123 45 67</li>
+                        <li class="mb-2"><i class="bi bi-envelope me-2"></i> info@fitlife.com</li>
+                        <li class="mb-2"><i class="bi bi-clock me-2"></i> 07:00 - 23:00</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+            
+            <!-- Alt bilgi -->
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; @DateTime.UtcNow.Year FitLife Spor Salonu. Tüm hakları saklıdır.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a asp-controller="Home" asp-action="Privacy" class="me-3">Gizlilik Politikası</a>
+                    <a asp-controller="Home" asp-action="Hakkimizda">Hakkımızda</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- =====================================================
+         JAVASCRIPT DOSYALARI
+         ===================================================== -->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Sayfa özel scriptler için section -->
+    @await RenderSectionAsync("Scripts", required: false)
+    
+    <script>
+        // =====================================================
+        // GENEL JAVASCRIPT KODLARI
+        // =====================================================
+        
+        // Navbar scroll efekti
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.padding = '0.5rem 0';
+                navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.2)';
+            } else {
+                navbar.style.padding = '0.8rem 0';
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.15)';
+            }
+        });
+
+        // Alert otomatik kapanma (5 saniye sonra)
+        setTimeout(function() {
+            var alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                var bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

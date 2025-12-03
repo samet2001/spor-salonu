@@ -1,0 +1,282 @@
+@*
+=====================================================
+RANDEVU OLUŞTUR SAYFASI (Olustur.cshtml)
+Yeni randevu oluşturma formu
+=====================================================
+*@
+
+@model RandevuOlusturViewModel
+@{
+    ViewData["Title"] = "Yeni Randevu";
+}
+
+<div class="row justify-content-center py-4">
+    <div class="col-lg-8">
+        <!-- Sayfa Başlığı -->
+        <div class="text-center mb-4">
+            <div class="page-icon mb-3">
+                <i class="bi bi-calendar-plus"></i>
+            </div>
+            <h2 class="fw-bold">Yeni Randevu Oluştur</h2>
+            <p class="text-muted">Antrenör ve hizmet seçerek randevunuzu oluşturun</p>
+        </div>
+
+        <!-- Randevu Formu -->
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-4 p-lg-5">
+                <form asp-action="Olustur" method="post" id="randevuForm">
+                    @Html.AntiForgeryToken()
+                    
+                    <!-- Hata mesajları -->
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <!-- Adım 1: Antrenör Seçimi -->
+                    <div class="form-section mb-4">
+                        <h5 class="section-title">
+                            <span class="step-number">1</span>
+                            <i class="bi bi-person-badge me-2"></i>Antrenör Seçimi
+                        </h5>
+                        <div class="mb-3">
+                            <label asp-for="AntrenorId" class="form-label">Antrenör *</label>
+                            <select asp-for="AntrenorId" asp-items="Model.Antrenorler" class="form-select form-select-lg" 
+                                    id="antrenorSelect" onchange="antrenorDegisti()">
+                                <option value="">Antrenör seçiniz...</option>
+                            </select>
+                            <span asp-validation-for="AntrenorId" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Adım 2: Hizmet Seçimi -->
+                    <div class="form-section mb-4">
+                        <h5 class="section-title">
+                            <span class="step-number">2</span>
+                            <i class="bi bi-grid me-2"></i>Hizmet Seçimi
+                        </h5>
+                        <div class="mb-3">
+                            <label asp-for="HizmetId" class="form-label">Hizmet *</label>
+                            <select asp-for="HizmetId" asp-items="Model.Hizmetler" class="form-select form-select-lg" 
+                                    id="hizmetSelect" onchange="hizmetDegisti()">
+                                <option value="">Hizmet seçiniz...</option>
+                            </select>
+                            <span asp-validation-for="HizmetId" class="text-danger small"></span>
+                            
+                            <!-- Hizmet Bilgisi -->
+                            <div id="hizmetBilgi" class="hizmet-info mt-3" style="display: none;">
+                                <div class="row text-center">
+                                    <div class="col-4">
+                                        <i class="bi bi-clock text-primary"></i>
+                                        <span id="hizmetSure"></span>
+                                    </div>
+                                    <div class="col-4">
+                                        <i class="bi bi-currency-lira text-success"></i>
+                                        <span id="hizmetUcret"></span>
+                                    </div>
+                                    <div class="col-4">
+                                        <i class="bi bi-people text-info"></i>
+                                        <span id="hizmetKapasite"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Adım 3: Tarih ve Saat -->
+                    <div class="form-section mb-4">
+                        <h5 class="section-title">
+                            <span class="step-number">3</span>
+                            <i class="bi bi-calendar3 me-2"></i>Tarih ve Saat
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="RandevuTarihi" class="form-label">Tarih *</label>
+                                <input asp-for="RandevuTarihi" type="date" class="form-control form-control-lg" 
+                                       id="tarihInput" onchange="tarihDegisti()" 
+                                       min="@DateTime.UtcNow.ToString("yyyy-MM-dd")" />
+                                <span asp-validation-for="RandevuTarihi" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="BaslangicSaati" class="form-label">Saat *</label>
+                                <select asp-for="BaslangicSaati" class="form-select form-select-lg" id="saatSelect">
+                                    <option value="">Önce tarih seçin...</option>
+                                </select>
+                                <span asp-validation-for="BaslangicSaati" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Adım 4: Not (Opsiyonel) -->
+                    <div class="form-section mb-4">
+                        <h5 class="section-title">
+                            <span class="step-number">4</span>
+                            <i class="bi bi-chat-dots me-2"></i>Ek Bilgi (İsteğe Bağlı)
+                        </h5>
+                        <div class="mb-3">
+                            <label asp-for="UyeNotu" class="form-label">Not</label>
+                            <textarea asp-for="UyeNotu" class="form-control" rows="3" 
+                                      placeholder="Antrenöre iletmek istediğiniz bilgi varsa yazabilirsiniz..."></textarea>
+                            <span asp-validation-for="UyeNotu" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Butonlar -->
+                    <div class="d-flex gap-3 pt-3">
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-lg flex-grow-1">
+                            <i class="bi bi-arrow-left me-2"></i>Vazgeç
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
+                            <i class="bi bi-check-circle me-2"></i>Randevu Oluştur
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+<style>
+    .page-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #e63946, #f4a261);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+    
+    .page-icon i {
+        font-size: 2.5rem;
+        color: white;
+    }
+    
+    .form-section {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 1.5rem;
+    }
+    
+    .section-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        color: var(--secondary-color);
+    }
+    
+    .step-number {
+        width: 30px;
+        height: 30px;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-right: 0.75rem;
+    }
+    
+    .hizmet-info {
+        background: white;
+        border-radius: 10px;
+        padding: 1rem;
+    }
+    
+    .hizmet-info i {
+        font-size: 1.5rem;
+        display: block;
+        margin-bottom: 0.3rem;
+    }
+    
+    .hizmet-info span {
+        font-weight: 600;
+    }
+</style>
+}
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<script>
+    // Antrenör değiştiğinde hizmetleri güncelle
+    function antrenorDegisti() {
+        var antrenorId = document.getElementById('antrenorSelect').value;
+        var hizmetSelect = document.getElementById('hizmetSelect');
+        
+        if (!antrenorId) {
+            hizmetSelect.innerHTML = '<option value="">Önce antrenör seçin...</option>';
+            return;
+        }
+        
+        // AJAX ile antrenörün hizmetlerini getir
+        fetch('/Randevu/AntrenorHizmetleri?antrenorId=' + antrenorId)
+            .then(response => response.json())
+            .then(data => {
+                hizmetSelect.innerHTML = '<option value="">Hizmet seçiniz...</option>';
+                data.forEach(function(hizmet) {
+                    var option = document.createElement('option');
+                    option.value = hizmet.id;
+                    option.text = hizmet.ad + ' (' + hizmet.sure + ' dk - ' + hizmet.ucret + '₺)';
+                    option.dataset.sure = hizmet.sure;
+                    option.dataset.ucret = hizmet.ucret;
+                    hizmetSelect.appendChild(option);
+                });
+            });
+        
+        // Saatleri sıfırla
+        document.getElementById('saatSelect').innerHTML = '<option value="">Önce tarih seçin...</option>';
+    }
+    
+    // Hizmet değiştiğinde bilgileri göster
+    function hizmetDegisti() {
+        var hizmetSelect = document.getElementById('hizmetSelect');
+        var selectedOption = hizmetSelect.options[hizmetSelect.selectedIndex];
+        var hizmetBilgi = document.getElementById('hizmetBilgi');
+        
+        if (selectedOption && selectedOption.value) {
+            document.getElementById('hizmetSure').textContent = selectedOption.dataset.sure + ' dakika';
+            document.getElementById('hizmetUcret').textContent = selectedOption.dataset.ucret + '₺';
+            document.getElementById('hizmetKapasite').textContent = 'Birebir';
+            hizmetBilgi.style.display = 'block';
+            
+            // Tarih seçiliyse saatleri güncelle
+            tarihDegisti();
+        } else {
+            hizmetBilgi.style.display = 'none';
+        }
+    }
+    
+    // Tarih değiştiğinde müsait saatleri getir
+    function tarihDegisti() {
+        var antrenorId = document.getElementById('antrenorSelect').value;
+        var hizmetId = document.getElementById('hizmetSelect').value;
+        var tarih = document.getElementById('tarihInput').value;
+        var saatSelect = document.getElementById('saatSelect');
+        
+        if (!antrenorId || !hizmetId || !tarih) {
+            saatSelect.innerHTML = '<option value="">Önce antrenör, hizmet ve tarih seçin...</option>';
+            return;
+        }
+        
+        // AJAX ile müsait saatleri getir
+        fetch('/Randevu/MusaitSaatler?antrenorId=' + antrenorId + '&tarih=' + tarih + '&hizmetId=' + hizmetId)
+            .then(response => response.json())
+            .then(data => {
+                saatSelect.innerHTML = '';
+                if (data.length === 0) {
+                    saatSelect.innerHTML = '<option value="">Bu tarihte müsait saat yok</option>';
+                } else {
+                    saatSelect.innerHTML = '<option value="">Saat seçiniz...</option>';
+                    data.forEach(function(saat) {
+                        var option = document.createElement('option');
+                        option.value = saat;
+                        option.text = saat;
+                        saatSelect.appendChild(option);
+                    });
+                }
+            });
+    }
+</script>
+}
+

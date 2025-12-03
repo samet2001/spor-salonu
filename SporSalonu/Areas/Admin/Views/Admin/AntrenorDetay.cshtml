@@ -1,0 +1,173 @@
+@*
+=====================================================
+ADMIN - ANTRENÖR DETAY SAYFASI
+=====================================================
+*@
+
+@model Antrenor
+@{
+    ViewData["Title"] = "Antrenör Detayı";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Sayfa Başlığı -->
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <div class="d-flex align-items-center">
+                    <a asp-action="Antrenorler" class="btn btn-outline-secondary me-3">
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
+                    <div>
+                        <h2 class="fw-bold mb-0">
+                            <i class="bi bi-person-badge text-success me-2"></i>@Model.TamIsim
+                        </h2>
+                        <p class="text-muted mb-0">Antrenör Detayları</p>
+                    </div>
+                </div>
+                <div>
+                    @if (Model.Aktif)
+                    {
+                        <span class="badge bg-success fs-6">Aktif</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger fs-6">Pasif</span>
+                    }
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Sol Kolon: Genel Bilgiler -->
+                <div class="col-lg-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="trainer-avatar-large mb-3">
+                                @if (!string.IsNullOrEmpty(Model.FotografUrl))
+                                {
+                                    <img src="@Model.FotografUrl" alt="@Model.TamIsim" />
+                                }
+                                else
+                                {
+                                    <i class="bi bi-person-circle"></i>
+                                }
+                            </div>
+                            
+                            <h4 class="fw-bold mb-1">@Model.TamIsim</h4>
+                            <p class="text-primary mb-3">@Model.UzmanlikAlanlari</p>
+                            
+                            <div class="d-grid gap-2">
+                                <a asp-action="AntrenorDuzenle" asp-route-id="@Model.Id" class="btn btn-warning">
+                                    <i class="bi bi-pencil me-2"></i>Düzenle
+                                </a>
+                                <form asp-action="AntrenorSil" asp-route-id="@Model.Id" method="post" 
+                                      onsubmit="return confirm('Bu antrenörü pasif duruma almak istediğinizden emin misiniz?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-outline-danger w-100">
+                                        <i class="bi bi-trash me-2"></i>Pasif Yap
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sağ Kolon: Detay Bilgiler -->
+                <div class="col-lg-8">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>İletişim Bilgileri</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="text-muted small">E-posta</label>
+                                    <p class="mb-0 fw-semibold">
+                                        <i class="bi bi-envelope me-2"></i>@Model.Eposta
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="text-muted small">Telefon</label>
+                                    <p class="mb-0 fw-semibold">
+                                        <i class="bi bi-telephone me-2"></i>@Model.Telefon
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="bi bi-clock me-2"></i>Çalışma Bilgileri</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="text-muted small">Mesai Saatleri</label>
+                                    <p class="mb-0 fw-semibold">
+                                        @Model.MesaiBaslangic.ToString(@"hh\:mm") - @Model.MesaiBitis.ToString(@"hh\:mm")
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="text-muted small">Seans Ücreti</label>
+                                    <p class="mb-0 fw-semibold">
+                                        ₺@Model.SeansUcreti / seans
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="text-muted small">Deneyim</label>
+                                    <p class="mb-0 fw-semibold">
+                                        @Model.DeneyimYili yıl
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="text-muted small">Kayıt Tarihi</label>
+                                    <p class="mb-0 fw-semibold">
+                                        @Model.KayitTarihi.ToLocalTime().ToString("dd.MM.yyyy")
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Biyografi))
+                    {
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0"><i class="bi bi-journal-text me-2"></i>Biyografi</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">@Model.Biyografi</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .trainer-avatar-large {
+        width: 150px;
+        height: 150px;
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    .trainer-avatar-large img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .trainer-avatar-large i {
+        font-size: 5rem;
+        color: white;
+    }
+</style>
+
