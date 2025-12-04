@@ -198,4 +198,4 @@ Bu proje eğitim amaçlı geliştirilmiştir.
 
 ---
 
-⭐ **Projeyi beğendiyseniz yıldız vermeyi unutmayın!**
+SAMET FIRINCI B211210036
