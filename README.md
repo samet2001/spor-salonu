@@ -1,31 +1,34 @@
-# 🏋️ FitLife Spor Salonu Yönetim Sistemi
+
+SAMET FIRINCI B211210036
+
+#  FitLife Spor Salonu Yönetim Sistemi
 
 ASP.NET Core MVC ile geliştirilmiş modern bir spor salonu yönetim ve randevu sistemi.
 
-## ✨ Özellikler
+##  Özellikler
 
-### 🎯 Temel Özellikler
-- ✅ **Spor Salonu Yönetimi** - Salon bilgileri, çalışma saatleri, hizmet tanımları
-- ✅ **Antrenör Yönetimi** - Uzmanlık alanları, müsaitlik saatleri, hizmet atamaları
-- ✅ **Üye Sistemi** - Kayıt, giriş, profil yönetimi, BMI hesaplama
-- ✅ **Randevu Sistemi** - Randevu alma, çakışma kontrolü, onay mekanizması
-- ✅ **Admin Paneli** - Tüm varlıklar için CRUD işlemleri
-- ✅ **AI Önerileri** - Groq API (Llama 3.3) ile kişiselleştirilmiş egzersiz ve diyet önerileri
-- ✅ **REST API** - 8 endpoint, 85+ LINQ sorgusu
-- ✅ **BMI Kategorisi** - Otomatik hesaplama ve gösterim (Zayıf/Normal/Fazla Kilolu/Obez)
+###  Temel Özellikler
+-   *Spor Salonu Yönetimi** - Salon bilgileri, çalışma saatleri, hizmet tanımları
+-  **Antrenör Yönetimi** - Uzmanlık alanları, müsaitlik saatleri, hizmet atamaları
+-  **Üye Sistemi** - Kayıt, giriş, profil yönetimi, BMI hesaplama
+-  **Randevu Sistemi** - Randevu alma, çakışma kontrolü, onay mekanizması
+-  **Admin Paneli** - Tüm varlıklar için CRUD işlemleri
+-  **AI Önerileri** - Groq API (Llama 3.3) ile kişiselleştirilmiş egzersiz ve diyet önerileri
+-  **REST API** - 8 endpoint, 85+ LINQ sorgusu
+-  **BMI Kategorisi** - Otomatik hesaplama ve gösterim (Zayıf/Normal/Fazla Kilolu/Obez)
 
-### 🛡️ Güvenlik
+###  Güvenlik
 - Role-based authorization (Admin/Üye)
 - Password hashing (ASP.NET Core Identity)
 - Anti-forgery tokens
 - Client & Server side validation
 
-### 🎨 Kullanıcı Arayüzü
+###  Kullanıcı Arayüzü
 - Bootstrap 5 responsive tasarım
 - Modern ve kullanıcı dostu arayüz
 - Mobil uyumlu
 
-## 🚀 Kurulum
+##  Kurulum
 
 ### Gereksinimler
 - .NET 10.0 SDK
@@ -51,7 +54,7 @@ cd spor-salonu/SporSalonu
 
 ### 3. Groq API Key Yapılandırması
 
-⚠️ **ÖNEMLİ:** API key'inizi asla kaynak kodda saklamayın!
+ **ÖNEMLİ:** API key'inizi asla kaynak kodda saklamayın!
 
 ```bash
 # User secrets ile güvenli şekilde ekleyin:
@@ -77,7 +80,7 @@ dotnet run
 
 Tarayıcıda açın: http://localhost:5000
 
-## 👤 Demo Hesaplar
+## Demo Hesaplar
 
 ### Admin Girişi
 - **Email:** b211210036@sakarya.edu.tr
@@ -87,7 +90,7 @@ Tarayıcıda açın: http://localhost:5000
 - **Email:** test@test.com
 - **Şifre:** Test123!
 
-## 📚 API Kullanımı
+## API Kullanımı
 
 ### REST API Endpoints
 
@@ -114,7 +117,7 @@ GET /api/sporsalonu/ara?q=yoga
 GET /api/sporsalonu/bilgi
 ```
 
-## 🏗️ Teknoloji Stack
+##  Teknoloji Stack
 
 - **Framework:** ASP.NET Core MVC 10.0
 - **ORM:** Entity Framework Core
@@ -123,7 +126,7 @@ GET /api/sporsalonu/bilgi
 - **Frontend:** Bootstrap 5, jQuery, HTML5, CSS3
 - **Authentication:** ASP.NET Core Identity
 
-## 📁 Proje Yapısı
+## Proje Yapısı
 
 ```
 SporSalonu/
@@ -152,21 +155,21 @@ SporSalonu/
 
 ```
 
-## 🎓 Proje Gereksinimleri (Karşılanan)
+## Proje Gereksinimleri (Karşılanan)
 
-- ✅ ASP.NET Core MVC
-- ✅ PostgreSQL + Entity Framework Core
-- ✅ CRUD işlemleri (Create, Read, Update, Delete)
-- ✅ Client & Server side validation
-- ✅ Admin paneli
-- ✅ Kullanıcı kayıt/giriş sistemi
-- ✅ Role-based authorization (Admin, Üye)
-- ✅ REST API + LINQ sorguları (85+ operasyon)
-- ✅ AI entegrasyonu (Groq API)
-- ✅ BMI hesaplama ve kategorizasyon
-- ✅ Responsive tasarım (Bootstrap 5)
+-  ASP.NET Core MVC
+-  PostgreSQL + Entity Framework Core
+-  CRUD işlemleri (Create, Read, Update, Delete)
+- Client & Server side validation
+-  Admin paneli
+-  Kullanıcı kayıt/giriş sistemi
+-  Role-based authorization (Admin, Üye)
+-  REST API + LINQ sorguları (85+ operasyon)
+-  AI entegrasyonu (Groq API)
+-  BMI hesaplama ve kategorizasyon
+-  Responsive tasarım (Bootstrap 5)
 
-## 🔧 Geliştirme
+##  Geliştirme
 
 ### Migration Oluşturma
 ```bash
@@ -180,22 +183,15 @@ dotnet ef database drop
 dotnet ef database update
 ```
 
-## 📝 Notlar
+##  Notlar
 
 - Tüm DateTime değerleri UTC formatında saklanır (PostgreSQL uyumluluğu)
 - API anahtarları user secrets ile güvenli şekilde saklanmalıdır
 - Seed data otomatik olarak demo antrenör, hizmet ve üyeler oluşturur
 - BMI kategorileri: Zayıf (<18.5), Normal (18.5-25), Fazla Kilolu (25-30), Obez (>30)
 
-## 📞 İletişim
-
 **Geliştirici:** Samet Fırıncı  
 **GitHub:** https://github.com/samet2001
 
-## 📄 Lisans
-
-Bu proje eğitim amaçlı geliştirilmiştir.
-
----
 
 SAMET FIRINCI B211210036

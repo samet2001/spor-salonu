@@ -65,8 +65,6 @@ Bu proje, ASP.NET Core MVC kullanarak geliştirilmiş bir Spor Salonu Yönetim v
 
 3. **Tarayıcıda Açma**
    ```
-   https://localhost:5001
-   veya
    http://localhost:5000
    ```
 
@@ -139,16 +137,13 @@ Sistem, kullanıcıların fiziksel bilgileri (yaş, boy, kilo, cinsiyet) ve hede
 2. **Egzersiz Programı:** Haftalık antrenman planı
 3. **Beslenme Önerisi:** Günlük kalori ve makro besin dağılımı
 
-OpenAI API anahtarı eklenirse daha detaylı öneriler alınabilir.
+Ücretsiz api olduğundan her pc de yeniden almak gerekebilir.
 
 ## Geliştirici Notları
 
-- Tüm kodlar detaylı Türkçe açıklamalar içermektedir
 - Validation hem client hem server tarafında uygulanmıştır
 - Rol bazlı yetkilendirme (Admin, Üye) mevcuttur
 - Entity Framework Code First yaklaşımı kullanılmıştır
 
-## Lisans
 
-Bu proje eğitim amaçlı geliştirilmiştir.
 
