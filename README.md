@@ -1,3 +1,6 @@
+
+SAMET FIRINCI B211210036
+
 #  FitLife Spor Salonu Yönetim Sistemi
 
 ASP.NET Core MVC ile geliştirilmiş modern bir spor salonu yönetim ve randevu sistemi.
