@@ -193,5 +193,5 @@ dotnet ef database update
 **Geliştirici:** Samet Fırıncı  
 **GitHub:** https://github.com/samet2001
 
-
+SAKARYA ÜNİVERSİTESİ
 SAMET FIRINCI B211210036
