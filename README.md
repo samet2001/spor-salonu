@@ -190,7 +190,7 @@ dotnet ef database update
 - Seed data otomatik olarak demo antrenör, hizmet ve üyeler oluşturur
 - BMI kategorileri: Zayıf (<18.5), Normal (18.5-25), Fazla Kilolu (25-30), Obez (>30)
 
-**Geliştirici:** Samet Fırıncı  
+**Geliştirici:** Samet Fırıncı  B211210036
 **GitHub:** https://github.com/samet2001
 
 SAKARYA ÜNİVERSİTESİ
